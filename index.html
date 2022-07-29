@@ -205,10 +205,15 @@
                                 const test = new THREE.GLTF2Loader().load(`${modelFiles[i]}`, (response) => {
                                     const scene = response.scene;
                                     const object = scene.children[0];
+									
                                     // Іноді модель не можна побачити з кількох причин, найчастіше варто збільшити чи зменшити у 100 разів.
                                     // Читайте: https://threejs.org/docs/index.html#manual/en/introduction/Loading-3D-models
                                     // Тут ми зменшуємо її, щоб точно побачити її на сцені. Ви можете видалити цю шкалу, якщо потрібно
-                                    object.scale.set(0.3, 0.3, 0.3);
+                                    switch (i) {
+									case 0: object.scale.set(1, 1, 1); break;
+									case 1: object.scale.set(0.3, 0.3, 0.3); break;
+									}
+									
                                     // Ви можете самостійно змінити поворот або позицію моделі
                                     object.position.set(0, 0, 0);
                                     //object.rotation.set(0, Math.PI, Math.PI);
