@@ -172,12 +172,12 @@
   
                 // Створюємо масив для всіх маркерів
                 const markerRoots = [];
-                for (let i = 0; i < 2; i++) {
+                for (let i = 0; i < 3; i++) {
                     markerRoots[i] = new THREE.Group();
                 }
   
                 // Проходимо по кожному маркеру з масиву і додаємо його в головний контейнер
-                for (let i = 0; i < 2; i++) {
+                for (let i = 0; i < 3; i++) {
                     mainContainer.add(markerRoots[i]);
 
                     // Якщо поточний маркер – це баркод, створюємо AR контролер під баркод
