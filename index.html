@@ -151,24 +151,24 @@
                 // Створюємо головну групу для всіх 3D об'єктів
                 mainContainer = new THREE.Group();
 
-                // Масив назв файлів .patt. Масив заповнюється в порядку додавання маркерів
+// Масив назв файлів .patt. Масив заповнюється в порядку додавання маркерів
                 // якщо замість .patt було додано баркод, на його місце в масив додається порожній рядок
-                const patternNames = ["pattern-ScanMe.patt" ,"" , "", ""];
+                const patternNames = ["" ,""];
                 // Масив баркодів, заповнюється одночасно з масивом патернів
                 // якщо замість баркоду був доданий .patt, на його місце масив додається -1
-                const patternBarcode = [-1, 1, 2, 3];
+                const patternBarcode = [1 ,2];
                 // Масив типів контенту кожного маркера, заповнюється значеннями: зображення, модель, відео
-                const modes = ["video" ,"video", "model","model"];
+                const modes = ["model" ,"model"];
                 // Масив файлів моделей, якщо немає моделі буде додано порожній рядок
-                const modelFiles = ["" ,"", "cat.gltf","model.glb"];
+                const modelFiles = ["model.glb" ,"cat.gltf"];
                 // Масив файлів зображень, якщо немає зображення буде додано також порожній рядок
-                const imageFiles = ["" ,"", "",""];
+                const imageFiles = ["" ,""];
                 // Масив файлів відео, якщо немає відео буде ще один порожній рядок
-                const videoFiles = ["Intro_1.mp4" ,"1-song.mp4", "",""];
+                const videoFiles = ["" ,""];
                 // Масив файлів аудіо, якщо немає аудіо буде так само порожній рядок
-                const audioFiles = ["" ,"", "",""];
+                const audioFiles = ["Alex.mp3" ,"Cat.mp3"];
                 // Масив опцій повтору аудіо та відео контенту, по дефолту для всіх буде false
-                const repeatOptions = ["false" ,"false", "false","false"];
+                const repeatOptions = ["false" ,"false"];
   
                 // Створюємо масив для всіх маркерів
                 const markerRoots = [];
