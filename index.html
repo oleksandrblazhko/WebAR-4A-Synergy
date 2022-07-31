@@ -166,7 +166,7 @@
                 // Масив файлів зображень, якщо немає зображення буде додано також порожній рядок
                 const imageFiles = ["","","","","","","","","",""];
                 // Масив файлів відео, якщо немає відео буде ще один порожній рядок
-                const videoFiles = ["Intro_1.mp4","1-song.mp4","","1-song.mp4","","1-song.mp4","","1-song.mp4","","5-sunrise.mp4"];
+                const videoFiles = ["Intro_1.mp4","1-song.mp4","","2-song.mp4","","3-song.mp4","","4-song.mp4","","5-sunrise.mp4"];
                 // Масив файлів аудіо, якщо немає аудіо буде так само порожній рядок
                 const audioFiles = ["","","chorus.mp3","","chorus.mp3","","chorus.mp3","","chorus.mp3",""];
                 // Масив опцій повтору аудіо та відео контенту, по дефолту для всіх буде false
@@ -212,16 +212,23 @@
                                     // Читайте: https://threejs.org/docs/index.html#manual/en/introduction/Loading-3D-models
                                     // Тут ми зменшуємо її, щоб точно побачити її на сцені. Ви можете видалити цю шкалу, якщо потрібно
                                     switch (i) {
-						case 2: object.scale.set(0.2, 0.2, 0.2); break;
-						case 4: object.scale.set(0.3, 0.3, 0.3); break;
-						case 6: object.scale.set(0.3, 0.3, 0.3); break;
-						case 8: object.scale.set(0.3, 0.3, 0.3); break;
+						case 2: object.scale.set(0.4, 0.4, 0.4); break;
+						case 4: object.scale.set(1, 1, 1); break;
+						case 6: object.scale.set(1, 1, 1); break;
+						case 8: object.scale.set(1, 1, 1); break;
 						    						    
     				    }
 									
                                     // Ви можете самостійно змінити поворот або позицію моделі
                                     object.position.set(0, 0, 0);
                                     //object.rotation.set(0, Math.PI, Math.PI);
+				    switch (i) {
+					        case 2: object.rotation.set(0, -Math.PI/2, 0); break;
+						case 4: object.rotation.set(0, Math.PI/2, 0); break;
+						case 6: object.rotation.set(0, 0, -Math.PI/2); break;
+						case 8: object.rotation.set(0, 0, Math.PI/2); break;
+    				    }
+					
                                     // Додавання нашої моделі до контейнера групи маркерів
                                     markerRoots[i].add(object);
                                     resolve(modelFiles[i])
