@@ -219,13 +219,16 @@
 						    						    
     				    }
 									
-                                    // Ви можете самостійно змінити поворот або позицію моделі
-                                    // object.position.set(0, 0, 0);
+                                   	// Ви можете самостійно змінити поворот або позицію моделі
+                                   	// object.position.set(X, Y, Z);
+					// X - право (+) или влево (-) от камеры
+					// Y - вверх (+) или вниз (-) от камеры
+				    	// Z - ближе (+) или дальше (-) от камеры
 					switch (i) {
 					        case 2: object.position.set(0, 0, 0); break;
-						case 4: object.position.set(3, 0, 0); break;
-						case 6: object.position.set(0, 3, 0); break;
-						case 8: object.position.set(0, 0, 3); break;
+						case 4: object.position.set(0, 0, -2); break;
+						case 6: object.position.set(0, 0, -2); break;
+						case 8: object.position.set(0, 0, 0); break;
     				    }
 					
 				    // object.rotation.set(X_angle, Y_angle, Z_angle), 
