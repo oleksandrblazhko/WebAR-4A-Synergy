@@ -45,15 +45,29 @@ WebAR-4A-Synergy/
 
 ## Content Configuration
 
-The project is pre-configured with 10 marker slots, each associated with different types of content:
+The project is pre-configured with 10 marker slots, each associated with different types of content. These configurations are now stored in a separate `config.json` file, making the system more flexible and easily configurable without changing code.
 
-- **Marker slots 0, 2, 4, 6, 8**: Pattern markers
-- **Marker slots 1, 3, 5, 7, 9**: Barcode markers (values 1-5)
+The `config.json` file contains:
 
-Content types include:
-- 3D models (.gltf, .glb files)
-- Video content (.mp4 files)
-- Audio content (.mp3 files)
+- **markers**: An array of marker configurations with properties:
+  - `id`: Unique identifier for the marker
+  - `type`: Either "pattern" or "barcode"
+  - `patternName`: Name of the pattern file (.patt) when type is "pattern"
+  - `barcode`: Numeric value when type is "barcode"
+  - `contentType`: Either "model", "video", "image", or "controller"
+  - `modelFile`: Path to 3D model file
+  - `videoFile`: Path to video file
+  - `audioFile`: Path to audio file
+  - `scale`, `position`, `rotation`: Transformation properties for 3D objects
+  - `repeatOption`: Whether to loop media content
+
+- **settings**: Global configuration options:
+  - `maxMarkers`: Maximum number of markers to process
+  - `detectionMode`: AR detection mode
+  - `cameraParametersUrl`: Path to camera calibration file
+  - Other AR context parameters
+
+This configuration-driven approach allows for easy modification of the AR experience without code changes.
 
 ## Building and Running
 
