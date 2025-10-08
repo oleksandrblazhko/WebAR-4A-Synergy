@@ -87,26 +87,6 @@
                         const markers = config.markers;
                         const settings = config.settings;
                         
-                        // Оголошуємо сцену, до якої додамо головний контейнер з усіма 3D об'єктами.
-                        scene = new THREE.Scene();
-
-                        // Додаємо світло на сцену, інакше базові матеріали будуть просто чорними.
-                        // т.к. їм нема чого відображати, зверніться до документації бібліотеки three.js, щоб
-                        // прочитати про докладну роботу класу Material
-                        let ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
-                        scene.add(ambientLight);
-
-                        // Додаємо камеру, яка буде пізніше перепризначена на камеру смартфона
-                        camera = new THREE.Camera();
-                        scene.add(camera);
-                        const listener = new THREE.AudioListener();
-                        camera.add(listener);
-                        const audioLoader = new THREE.AudioLoader();
-
-                        clock = new THREE.Clock();
-                        deltaTime = 0;
-                        totalTime = 0;
-
                         // Ініціалізуємо AR оточення
                         arToolkitSource = new THREEx.ArToolkitSource({
                             sourceType: 'webcam',
@@ -124,6 +104,14 @@
                         // Викликаємо функцію під час ініціалізації AR
                         arToolkitSource.init(function onReady() {
                             onResize()
+                            
+                            // Показуємо відео-потік з камери на задньому плані
+                            arToolkitSource.domElement.style.position = 'absolute'
+                            arToolkitSource.domElement.style.top = '0px'
+                            arToolkitSource.domElement.style.left = '0px'
+                            arToolkitSource.domElement.style.display = 'block'
+                            arToolkitSource.domElement.style.zIndex = '-1'
+                            document.body.appendChild(arToolkitSource.domElement)
                         });
 
                         // Викликаємо функцію на resize івент веб-сторінки
@@ -146,6 +134,22 @@
                             camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
                         });
 
+                        // Оголошуємо сцену, до якої додамо головний контейнер з усіма 3D об'єктами.
+                        scene = new THREE.Scene();
+
+                        // Додаємо світло на сцену, інакше базові матеріали будуть просто чорними.
+                        // т.к. їм нема чого відображати, зверніться до документації бібліотеки three.js, щоб
+                        // прочитати про докладну роботу класу Material
+                        let ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+                        scene.add(ambientLight);
+
+                        // Додаємо камеру, яка буде пізніше перепризначена на камеру смартфона
+                        camera = new THREE.Camera();
+                        scene.add(camera);
+                        const listener = new THREE.AudioListener();
+                        camera.add(listener);
+                        const audioLoader = new THREE.AudioLoader();
+
                         // Оголошуємо стандартний рендерер і додаємо його до тега body html документа
                         renderer = new THREE.WebGLRenderer({
                             antialias: true,
@@ -157,13 +161,9 @@
                         renderer.domElement.style.left = '0px'
                         document.body.appendChild(renderer.domElement);
 
-                        // Показуємо відео-потік з камери на задньому плані
-                        arToolkitSource.domElement.style.position = 'absolute'
-                        arToolkitSource.domElement.style.top = '0px'
-                        arToolkitSource.domElement.style.left = '0px'
-                        arToolkitSource.domElement.style.display = 'block'
-                        arToolkitSource.domElement.style.zIndex = '-1'
-                        document.body.appendChild(arToolkitSource.domElement)
+                        clock = new THREE.Clock();
+                        deltaTime = 0;
+                        totalTime = 0;
 
                         // Створюємо головну групу для всіх 3D об'єктів
                         mainContainer = new THREE.Group();
