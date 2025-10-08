@@ -152,13 +152,6 @@
     }
   ],
   "settings": {
-    "maxMarkers": 10,
-    "detectionMode": "mono_and_matrix",
-    "matrixCodeType": "3x3",
-    "maxDetectionRate": 60,
-    "canvasWidth": 640,
-    "canvasHeight": 480,
-    "cameraParametersUrl": "data/camera_para.dat",
-    "patternIdOffset": 10000000000
+    "maxMarkers": 10
   }
 }
