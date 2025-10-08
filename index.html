@@ -269,37 +269,41 @@
                                     // Іноді модель не можна побачити з кількох причин, найчастіше варто збільшити чи зменшити у 100 разів.
                                     // Читайте: https://threejs.org/docs/index.html#manual/en/introduction/Loading-3D-models
                                     // Тут ми зменшуємо її, щоб точно побачити її на сцені. Ви можете видалити цю шкалу, якщо потрібно
-                                    switch (i) {
-						case 2: object.scale.set(0.4, 0.4, 0.4); break;
-						case 4: object.scale.set(0.5, 0.5, 0.5); break;
-						case 6: object.scale.set(0.7, 0.7, 0.7); break;
-						case 8: object.scale.set(1.2, 1.2, 1.2); break;
-						    						    
-    				    }
+                                    // Використовуємо modelScale з конфігурації, якщо він вказаний
+                                    if (config.markers[i] && config.markers[i].modelScale) {
+                                        const scale = config.markers[i].modelScale;
+                                        object.scale.set(scale, scale, scale);
+                                    }
 									
-                                   	// Ви можете самостійно змінити поворот або позицію моделі
-                                   	// object.position.set(X, Y, Z);
+                    // Ви можете самостійно змінити поворот або позицію моделі
+                    // object.position.set(X, Y, Z);
 					// X - право (+) или влево (-) от камеры
 					// Y - вверх (+) или вниз (-) от камеры
 				    	// Z - ближе (+) или дальше (-) от камеры
-					switch (i) {
-					        case 2: object.position.set(0, 0, 0); break;
-						case 4: object.position.set(0, 0, -0.5); break;
-						case 6: object.position.set(-0.5, -1, -2); break;
-						case 8: object.position.set(0, 0, 0); break;
-    				    }
+					// Використовуємо position з конфігурації, якщо він вказаний
+                    if (config.markers[i] && config.markers[i].position) {
+                        const pos = config.markers[i].position;
+                        object.position.set(
+                            pos.x || 0,
+                            pos.y || 0,
+                            pos.z || 0
+                        );
+                    }
 					
 				    // object.rotation.set(X_angle, Y_angle, Z_angle), 
 				    //
 				    // Z_angle - угол вперед (+) или назад (-) от положения камеры
 				    // Math.PI - 180 градусов
-                                    //object.rotation.set(0, Math.PI, Math.PI);
-				    switch (i) {
-					        // case 2: object.rotation.set(0, -Math.PI/2, 0); break;
-						case 4: object.rotation.set(0, -Math.PI/2, 0); break;
-						case 6: object.rotation.set(0, -Math.PI/2, 0); break;
-						// case 8: object.rotation.set(0, 0, Math.PI/2); break;
-    				    }
+                    //object.rotation.set(0, Math.PI, Math.PI);
+				    // Використовуємо rotation з конфігурації, якщо він вказаний
+                    if (config.markers[i] && config.markers[i].rotation) {
+                        const rot = config.markers[i].rotation;
+                        object.rotation.set(
+                            rot.x || 0,
+                            rot.y || 0,
+                            rot.z || 0
+                        );
+                    }
 					
                                     // Додавання нашої моделі до контейнера групи маркерів
                                     markerRoots[i].add(object);
