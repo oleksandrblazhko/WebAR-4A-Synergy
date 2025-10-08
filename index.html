@@ -92,6 +92,14 @@
                             sourceType: 'webcam',
                         });
 
+                        // Показуємо відео-потік з камери на задньому плані
+                        arToolkitSource.domElement.style.position = 'absolute'
+                        arToolkitSource.domElement.style.top = '0px'
+                        arToolkitSource.domElement.style.left = '0px'
+                        arToolkitSource.domElement.style.display = 'block'
+                        arToolkitSource.domElement.style.zIndex = '-1'
+                        document.body.appendChild(arToolkitSource.domElement)
+
                         // Функція перерендерує AR сцену під поточний розмір canvas
                         function onResize() {
                             arToolkitSource.onResize()
@@ -104,14 +112,6 @@
                         // Викликаємо функцію під час ініціалізації AR
                         arToolkitSource.init(function onReady() {
                             onResize()
-                            
-                            // Показуємо відео-потік з камери на задньому плані
-                            arToolkitSource.domElement.style.position = 'absolute'
-                            arToolkitSource.domElement.style.top = '0px'
-                            arToolkitSource.domElement.style.left = '0px'
-                            arToolkitSource.domElement.style.display = 'block'
-                            arToolkitSource.domElement.style.zIndex = '-1'
-                            document.body.appendChild(arToolkitSource.domElement)
                         });
 
                         // Викликаємо функцію на resize івент веб-сторінки
