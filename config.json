@@ -94,6 +94,12 @@
       "target": 5,
       "contentType": "video",
       "contentFile": "5-sunrise.mp4"
-    }
+    },
+    {
+      "id": 10,
+      "type": "pattern",
+      "target": "pattern-controller.patt",
+      "contentType": "controller"
+    }    
   ]
 }
