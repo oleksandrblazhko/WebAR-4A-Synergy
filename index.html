@@ -107,20 +107,10 @@
                         deltaTime = 0;
                         totalTime = 0;
 
+                        // Ініціалізуємо AR оточення
                         arToolkitSource = new THREEx.ArToolkitSource({
                             sourceType: 'webcam',
                         });
-
-                        // Оголошуємо стандартний рендерер і додаємо його до тега body html документа
-                        renderer = new THREE.WebGLRenderer({
-                            antialias: true,
-                            alpha: true
-                        });
-                        renderer.setSize(640, 480);
-                        renderer.domElement.style.position = 'absolute'
-                        renderer.domElement.style.top = '0px'
-                        renderer.domElement.style.left = '0px'
-                        document.body.appendChild(renderer.domElement);
 
                         // Функція перерендерує AR сцену під поточний розмір canvas
                         function onResize() {
@@ -134,14 +124,6 @@
                         // Викликаємо функцію під час ініціалізації AR
                         arToolkitSource.init(function onReady() {
                             onResize()
-                            
-                            // Показуємо відео-потік з камери на задньому плані
-                            arToolkitSource.domElement.style.position = 'absolute'
-                            arToolkitSource.domElement.style.top = '0px'
-                            arToolkitSource.domElement.style.left = '0px'
-                            arToolkitSource.domElement.style.display = 'block'
-                            arToolkitSource.domElement.style.zIndex = '-1'
-                            document.body.appendChild(arToolkitSource.domElement)
                         });
 
                         // Викликаємо функцію на resize івент веб-сторінки
@@ -163,6 +145,25 @@
                         arToolkitContext.init(function onCompleted() {
                             camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
                         });
+
+                        // Оголошуємо стандартний рендерер і додаємо його до тега body html документа
+                        renderer = new THREE.WebGLRenderer({
+                            antialias: true,
+                            alpha: true
+                        });
+                        renderer.setSize(640, 480);
+                        renderer.domElement.style.position = 'absolute'
+                        renderer.domElement.style.top = '0px'
+                        renderer.domElement.style.left = '0px'
+                        document.body.appendChild(renderer.domElement);
+
+                        // Показуємо відео-потік з камери на задньому плані
+                        arToolkitSource.domElement.style.position = 'absolute'
+                        arToolkitSource.domElement.style.top = '0px'
+                        arToolkitSource.domElement.style.left = '0px'
+                        arToolkitSource.domElement.style.display = 'block'
+                        arToolkitSource.domElement.style.zIndex = '-1'
+                        document.body.appendChild(arToolkitSource.domElement)
 
                         // Створюємо головну групу для всіх 3D об'єктів
                         mainContainer = new THREE.Group();
