@@ -134,33 +134,6 @@
                         // Викликаємо функцію під час ініціалізації AR
                         arToolkitSource.init(function onReady() {
                             onResize()
-                            
-                            // Додаємо текстуру з камери до сцени
-                            let video = document.createElement('video');
-                            video.style.display = 'none';
-                            document.body.appendChild(video);
-                            
-                            video.srcObject = arToolkitSource.domElement.srcObject;
-                            video.play();
-                            
-                            // Створюємо текстуру з відео
-                            let cameraTexture = new THREE.VideoTexture(video);
-                            cameraTexture.minFilter = THREE.LinearFilter;
-                            cameraTexture.magFilter = THREE.NearestFilter;
-                            cameraTexture.format = THREE.RGBFormat;
-                            cameraTexture.generateMipmaps = false;
-                            
-                            // Створюємо площину для відео-текстури
-                            let cameraGeometry = new THREE.PlaneGeometry(2, 2, 4, 4);
-                            let cameraMaterial = new THREE.MeshBasicMaterial({
-                                map: cameraTexture,
-                                side: THREE.BackSide
-                            });
-                            let cameraQuad = new THREE.Mesh(cameraGeometry, cameraMaterial);
-                            cameraQuad.position.z = -10;
-                            
-                            // Додаємо відео-текстуру до сцени під віртуальні об'єкти
-                            scene.add(cameraQuad);
                         });
 
                         // Викликаємо функцію на resize івент веб-сторінки
