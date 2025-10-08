@@ -3,125 +3,76 @@
     {
       "id": 0,
       "type": "pattern",
-      "patternName": "pattern-ScanMe.patt",
-      "barcode": -1,
+      "target": "pattern-ScanMe.patt",
       "contentType": "video",
-      "modelFile": "",
-      "imageFile": "",
-      "videoFile": "Intro_1.mp4",
-      "audioFile": "",
-      "repeatOption": false
+      "contentFile": "Intro_1.mp4"
     },
     {
       "id": 1,
-      "type": "barcode",
-      "patternName": "",
-      "barcode": 1,
+      "type": "barcode", 
+      "target": 1,
       "contentType": "video",
-      "modelFile": "",
-      "imageFile": "",
-      "videoFile": "1-song.mp4",
-      "audioFile": "",
-      "repeatOption": false
+      "contentFile": "1-song.mp4"
     },
     {
       "id": 2,
       "type": "pattern",
-      "patternName": "pattern-Cat.patt",
-      "barcode": -1,
+      "target": "pattern-Cat.patt",
       "contentType": "model",
-      "modelFile": "cat.gltf",
-      "imageFile": "",
-      "videoFile": "",
-      "audioFile": "chorus.mp3",
-      "repeatOption": false
+      "contentFile": "cat.gltf",
+      "audioFile": "chorus.mp3"
     },
     {
       "id": 3,
       "type": "barcode",
-      "patternName": "",
-      "barcode": 2,
-      "contentType": "video",
-      "modelFile": "",
-      "imageFile": "",
-      "videoFile": "2-song.mp4",
-      "audioFile": "",
-      "repeatOption": false
+      "target": 2,
+      "contentType": "video", 
+      "contentFile": "2-song.mp4"
     },
     {
       "id": 4,
       "type": "pattern",
-      "patternName": "pattern-pngwing.patt",
-      "barcode": -1,
+      "target": "pattern-pngwing.patt",
       "contentType": "model",
-      "modelFile": "penguinex.glb",
-      "imageFile": "",
-      "videoFile": "",
-      "audioFile": "chorus.mp3",
-      "repeatOption": false
+      "contentFile": "penguinex.glb",
+      "audioFile": "chorus.mp3"
     },
     {
       "id": 5,
       "type": "barcode",
-      "patternName": "",
-      "barcode": 3,
+      "target": 3,
       "contentType": "video",
-      "modelFile": "",
-      "imageFile": "",
-      "videoFile": "3-song.mp4",
-      "audioFile": "",
-      "repeatOption": false
+      "contentFile": "3-song.mp4"
     },
     {
       "id": 6,
       "type": "pattern",
-      "patternName": "pattern-Bender.patt",
-      "barcode": -1,
+      "target": "pattern-Bender.patt", 
       "contentType": "model",
-      "modelFile": "Bender.glb",
-      "imageFile": "",
-      "videoFile": "",
-      "audioFile": "chorus.mp3",
-      "repeatOption": false
+      "contentFile": "Bender.glb",
+      "audioFile": "chorus.mp3"
     },
     {
       "id": 7,
       "type": "barcode",
-      "patternName": "",
-      "barcode": 4,
+      "target": 4,
       "contentType": "video",
-      "modelFile": "",
-      "imageFile": "",
-      "videoFile": "4-song.mp4",
-      "audioFile": "",
-      "repeatOption": false
+      "contentFile": "4-song.mp4"
     },
     {
       "id": 8,
       "type": "pattern",
-      "patternName": "pattern-kopatuch.patt",
-      "barcode": -1,
+      "target": "pattern-kopatuch.patt",
       "contentType": "model",
-      "modelFile": "model.glb",
-      "imageFile": "",
-      "videoFile": "",
-      "audioFile": "chorus.mp3",
-      "repeatOption": false
+      "contentFile": "model.glb", 
+      "audioFile": "chorus.mp3"
     },
     {
       "id": 9,
       "type": "barcode",
-      "patternName": "",
-      "barcode": 5,
+      "target": 5,
       "contentType": "video",
-      "modelFile": "",
-      "imageFile": "",
-      "videoFile": "5-sunrise.mp4",
-      "audioFile": "",
-      "repeatOption": false
+      "contentFile": "5-sunrise.mp4"
     }
-  ],
-  "settings": {
-    "maxMarkers": 10
-  }
+  ]
 }
