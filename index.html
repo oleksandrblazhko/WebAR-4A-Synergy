@@ -114,12 +114,32 @@
                         renderer.domElement.style.left = '0px'
                         document.body.appendChild(renderer.domElement);
 
-                        // Додаємо текстуру з камери до сцени
-                        let video = document.createElement('video');
-                        video.style.display = 'none';
-                        document.body.appendChild(video);
+                        clock = new THREE.Clock();
+                        deltaTime = 0;
+                        totalTime = 0;
 
-                        arToolkitSource.init(() => {
+                        arToolkitSource = new THREEx.ArToolkitSource({
+                            sourceType: 'webcam',
+                        });
+
+                        // Функція перерендерує AR сцену під поточний розмір canvas
+                        function onResize() {
+                            arToolkitSource.onResize()
+                            arToolkitSource.copySizeTo(renderer.domElement)
+                            if (arToolkitContext.arController !== null) {
+                                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
+                            }
+                        }
+
+                        // Викликаємо функцію під час ініціалізації AR
+                        arToolkitSource.init(function onReady() {
+                            onResize()
+                            
+                            // Додаємо текстуру з камери до сцени
+                            let video = document.createElement('video');
+                            video.style.display = 'none';
+                            document.body.appendChild(video);
+                            
                             video.srcObject = arToolkitSource.domElement.srcObject;
                             video.play();
                             
@@ -141,28 +161,6 @@
                             
                             // Додаємо відео-текстуру до сцени під віртуальні об'єкти
                             scene.add(cameraQuad);
-                        });
-
-                        clock = new THREE.Clock();
-                        deltaTime = 0;
-                        totalTime = 0;
-
-                        arToolkitSource = new THREEx.ArToolkitSource({
-                            sourceType: 'webcam',
-                        });
-
-                        // Функція перерендерує AR сцену під поточний розмір canvas
-                        function onResize() {
-                            arToolkitSource.onResize()
-                            arToolkitSource.copySizeTo(renderer.domElement)
-                            if (arToolkitContext.arController !== null) {
-                                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
-                            }
-                        }
-
-                        // Викликаємо функцію під час ініціалізації AR
-                        arToolkitSource.init(function onReady() {
-                            onResize()
                         });
 
                         // Викликаємо функцію на resize івент веб-сторінки
