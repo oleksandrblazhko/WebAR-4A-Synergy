@@ -1,0 +1,105 @@
+{
+  "markers": [
+    {
+      "id": 0,
+      "type": "pattern",
+      "target": "pattern-ScanMe.patt",
+      "contentType": "video",
+      "contentFile": "Intro_1.mp4"
+    },
+    {
+      "id": 1,
+      "type": "barcode", 
+      "target": 1,
+      "contentType": "video",
+      "contentFile": "1-song.mp4"
+    },
+    {
+      "id": 2,
+      "type": "pattern",
+      "target": "pattern-Cat.patt",
+      "contentType": "model",
+      "contentFile": "cat.gltf",
+      "audioFile": "chorus.mp3",
+      "modelScale": 0.4,
+      "rotation": {
+        "y": -1.5707963267948966
+      }
+    },
+    {
+      "id": 3,
+      "type": "barcode",
+      "target": 2,
+      "contentType": "video", 
+      "contentFile": "2-song.mp4"
+    },
+    {
+      "id": 4,
+      "type": "pattern",
+      "target": "pattern-pngwing.patt",
+      "contentType": "model",
+      "contentFile": "penguinex.glb",
+      "audioFile": "chorus.mp3",
+      "modelScale": 0.5,
+      "position": {
+        "z": -0.5
+      },
+      "rotation": {
+        "y": -1.5707963267948966
+      }
+    },
+    {
+      "id": 5,
+      "type": "barcode",
+      "target": 3,
+      "contentType": "video",
+      "contentFile": "3-song.mp4"
+    },
+    {
+      "id": 6,
+      "type": "pattern",
+      "target": "pattern-Bender.patt", 
+      "contentType": "model",
+      "contentFile": "Bender.glb",
+      "audioFile": "chorus.mp3",
+      "modelScale": 0.7,
+      "position": {
+        "x": -0.5,
+        "y": -1,
+        "z": -2
+      },
+      "rotation": {
+        "y": -1.5707963267948966
+      }
+    },
+    {
+      "id": 7,
+      "type": "barcode",
+      "target": 4,
+      "contentType": "video",
+      "contentFile": "4-song.mp4"
+    },
+    {
+      "id": 8,
+      "type": "pattern",
+      "target": "pattern-kopatuch.patt",
+      "contentType": "model",
+      "contentFile": "model.glb", 
+      "audioFile": "chorus.mp3",
+      "modelScale": 1.2
+    },
+    {
+      "id": 9,
+      "type": "barcode",
+      "target": 5,
+      "contentType": "video",
+      "contentFile": "5-sunrise.mp4"
+    },
+    {
+      "id": 10,
+      "type": "pattern",
+      "target": "pattern-controller.patt",
+      "contentType": "controller"
+    }    
+  ]
+}
