@@ -113,6 +113,14 @@
                         renderer.domElement.style.top = '0px'
                         renderer.domElement.style.left = '0px'
                         document.body.appendChild(renderer.domElement);
+                        
+                        // Показуємо відео-потік з камери на задньому плані
+                        arToolkitSource.domElement.style.position = 'absolute'
+                        arToolkitSource.domElement.style.top = '0px'
+                        arToolkitSource.domElement.style.left = '0px'
+                        arToolkitSource.domElement.style.display = 'block'
+                        arToolkitSource.domElement.style.zIndex = '-1'
+                        document.body.appendChild(arToolkitSource.domElement)
 
                         clock = new THREE.Clock();
                         deltaTime = 0;
