@@ -116,7 +116,7 @@
                             antialias: true,
                             alpha: true
                         });
-                        renderer.setSize(settings.canvasWidth, settings.canvasHeight);
+                        renderer.setSize(640, 480);
                         renderer.domElement.style.position = 'absolute'
                         renderer.domElement.style.top = '0px'
                         renderer.domElement.style.left = '0px'
@@ -151,12 +151,12 @@
 
                         // Ініціалізуємо AR контекст під камеру, патерни, баркод 3х3
                         arToolkitContext = new THREEx.ArToolkitContext({
-                            cameraParametersUrl: settings.cameraParametersUrl,
-                            detectionMode: settings.detectionMode,
-                            matrixCodeType: settings.matrixCodeType,
-                            maxDetectionRate: settings.maxDetectionRate,
-                            canvasWidth: settings.canvasWidth,
-                            canvasHeight: settings.canvasHeight
+                            cameraParametersUrl: 'data/camera_para.dat',
+                            detectionMode: 'mono_and_matrix',
+                            matrixCodeType: "3x3",
+                            maxDetectionRate: 60,
+                            canvasWidth: 640,
+                            canvasHeight: 480
                         });
 
                         // Відновлюємо матрицю проекції камери після закінчення ініціалізації
@@ -169,12 +169,12 @@
 
                         // Створюємо масив для всіх маркерів
                         const markerRoots = [];
-                        for (let i = 0; i < markers.length; i++) {
+                        for (let i = 0; i < settings.maxMarkers; i++) {
                             markerRoots[i] = new THREE.Group();
                         }
 
                         // Проходимо по кожному маркеру з масиву і додаємо його в головний контейнер
-                        for (let i = 0; i < markers.length; i++) {
+                        for (let i = 0; i < settings.maxMarkers; i++) {
                             const marker = markers[i];
                             
                             mainContainer.add(markerRoots[i]);
@@ -185,7 +185,7 @@
                                 let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoots[i], {
                                     type: 'pattern', 
                                     patternUrl: marker.patternName, 
-                                    size: 1 + (i + 1) / settings.patternIdOffset
+                                    size: 1 + (i + 1) / patternIdOffset
                                 })
                                 patternsID.push(marker.patternName);
                             } else if (marker.type === 'barcode') {
