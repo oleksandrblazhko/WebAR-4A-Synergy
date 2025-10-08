@@ -119,13 +119,31 @@
                 camera.add(listener);
                 const audioLoader = new THREE.AudioLoader();
 
+                // Визначаємо роздільну здатність з конфігурації
+                let canvasWidth = 640;
+                let canvasHeight = 480;
+                
+                if (config && config.settings) {
+                    switch(config.settings.resolution) {
+                        case 'high':
+                            canvasWidth = 1280;
+                            canvasHeight = 720;
+                            break;
+                        case 'low':
+                        default:
+                            canvasWidth = 640;
+                            canvasHeight = 480;
+                            break;
+                    }
+                }
+
                 // Оголошуємо стандартний рендерер і додаємо його до тега body html документа
                 renderer = new THREE.WebGLRenderer({
                     antialias: true,
                     alpha: true
                 });
                 renderer.setClearColor(new THREE.Color('lightgrey'), 0)
-                renderer.setSize(640, 480);
+                renderer.setSize(canvasWidth, canvasHeight);
                 renderer.domElement.style.position = 'absolute'
                 renderer.domElement.style.top = '0px'
                 renderer.domElement.style.left = '0px'
