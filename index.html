@@ -78,7 +78,12 @@
 
             // Завантажуємо конфігурацію з config.json перед ініціалізацією
             fetch('config.json')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Config file error: ${response.status} ${response.statusText}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     config = data;
                     // Ініціалізуємо сцену та запускаємо цикл анімації
@@ -87,9 +92,14 @@
                 })
                 .catch(error => {
                     console.error('Error loading config:', error);
-                    // Якщо не вдалося завантажити конфігурацію, використовуємо стандартні значення
-                    initialize();
-                    animate();
+                    // Виводимо помилку на екран
+                    loader.style.display = 'block';
+                    loader.innerHTML = `<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #ff0000; font-family: Arial, sans-serif;">
+                        <h3>Configuration Error</h3>
+                        <p>Could not load configuration file.</p>
+                        <p>${error.message}</p>
+                        <p>Please ensure that config.json is present and accessible.</p>
+                    </div>`;
                 });
 
             function initialize() {
@@ -177,31 +187,47 @@
                 let repeatOptions = [];
                 
                 // Визначаємо кількість маркерів з конфігурації
-                let maxMarkers = 10; // Значення за замовчуванням
+                let maxMarkers = 0;
                 
-                // Заповнюємо масиви з конфігурації, якщо вона була завантажена
+                // Заповнюємо масиви з конфігурації
                 if (config && config.markers) {
-                    maxMarkers = config.settings ? config.settings.maxMarkers : config.markers.length;
+                    maxMarkers = config.markers.length;
                     for (let i = 0; i < config.markers.length; i++) {
-                        patternNames.push(config.markers[i].patternName);
-                        patternBarcode.push(config.markers[i].barcode);
+                        // Для зворотньої сумісності з попереднім кодом
+                        if (config.markers[i].type === 'pattern') {
+                            patternNames.push(config.markers[i].target);
+                            patternBarcode.push(-1);
+                        } else {
+                            patternNames.push('');
+                            patternBarcode.push(config.markers[i].target);
+                        }
+                        
                         modes.push(config.markers[i].contentType);
-                        modelFiles.push(config.markers[i].modelFile);
-                        imageFiles.push(config.markers[i].imageFile);
-                        videoFiles.push(config.markers[i].videoFile);
-                        audioFiles.push(config.markers[i].audioFile);
-                        repeatOptions.push(config.markers[i].repeatOption.toString());
+                        // Визначаємо тип контенту та встановлюємо відповідний файл
+                        switch(config.markers[i].contentType) {
+                            case 'model':
+                                modelFiles.push(config.markers[i].contentFile || '');
+                                imageFiles.push('');
+                                videoFiles.push('');
+                                break;
+                            case 'image':
+                                modelFiles.push('');
+                                imageFiles.push(config.markers[i].contentFile || '');
+                                videoFiles.push('');
+                                break;
+                            case 'video':
+                                modelFiles.push('');
+                                imageFiles.push('');
+                                videoFiles.push(config.markers[i].contentFile || '');
+                                break;
+                            default:
+                                modelFiles.push('');
+                                imageFiles.push('');
+                                videoFiles.push('');
+                        }
+                        audioFiles.push(config.markers[i].audioFile || '');
+                        repeatOptions.push('false'); // Тимчасово, можна додати в конфіг
                     }
-                } else {
-                    // Якщо конфігурація не завантажилася, використовуємо стандартні значення
-                    patternNames = ["pattern-ScanMe.patt","","pattern-Cat.patt","","pattern-pngwing.patt","","pattern-Bender.patt","","pattern-kopatuch.patt",""];
-                    patternBarcode = [-1, 1, -1, 2, -1, 3, -1, 4, -1, 5];
-                    modes = ["video","video","model","video","model","video","model","video","model","video"];
-                    modelFiles = ["","","cat.gltf","","penguinex.glb","","Bender.glb","","model.glb",""];
-                    imageFiles = ["","","","","","","","","",""];
-                    videoFiles = ["Intro_1.mp4","1-song.mp4","","2-song.mp4","","3-song.mp4","","4-song.mp4","","5-sunrise.mp4"];
-                    audioFiles = ["","","chorus.mp3","","chorus.mp3","","chorus.mp3","","chorus.mp3",""];
-                    repeatOptions = ["false","false","false","false","false","false","false","false","false","false"];
                 }
   
                 // Створюємо масив для всіх маркерів
