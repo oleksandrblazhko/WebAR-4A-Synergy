@@ -68,6 +68,7 @@
             var contentPromises = [];
 
             let contentInitialized = false;
+            let config = null; // Configuration loaded from config.json
             let barcodesSound = new Map();
             let patternsSound = new Map();
             let barcodesID = [];
@@ -75,275 +76,329 @@
 
             let controller;
 
-            // Ініціалізуємо сцену та запускаємо цикл анімації
-            initialize();
-            animate();
+            // Завантажуємо конфігурацію з config.json перед ініціалізацією
+            fetch('config.json')
+                .then(response => response.json())
+                .then(data => {
+                    config = data;
+                    // Ініціалізуємо сцену та запускаємо цикл анімації
+                    initialize();
+                    animate();
+                })
+                .catch(error => {
+                    console.error('Error loading config:', error);
+                    // Якщо не вдалося завантажити конфігурацію, використовуємо стандартні значення
+                    initialize();
+                    animate();
+                });
 
             function initialize() {
-                // Load configuration from JSON file
-                fetch('config.json')
-                    .then(response => response.json())
-                    .then(config => {
-                        const markers = config.markers;
-                        const settings = config.settings;
-                        
-                        // Ініціалізуємо AR оточення
-                        arToolkitSource = new THREEx.ArToolkitSource({
-                            sourceType: 'webcam',
-                        });
+                // Оголошуємо сцену, в яку додамо головний контейнер з усіма 3D об'єктами.
+                scene = new THREE.Scene();
 
-                        // Показуємо відео-потік з камери на задньому плані
-                        arToolkitSource.domElement.style.position = 'absolute'
-                        arToolkitSource.domElement.style.top = '0px'
-                        arToolkitSource.domElement.style.left = '0px'
-                        arToolkitSource.domElement.style.display = 'block'
-                        arToolkitSource.domElement.style.zIndex = '-1'
-                        document.body.appendChild(arToolkitSource.domElement)
+                // Додаємо світло на сцену, інакше базові матеріали будуть просто чорними.
+                // т.к. їм нема чого відображати, зверніться до документації бібліотеки three.js, щоб
+                // прочитати про докладну роботу класу Material
+                let ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+                scene.add(ambientLight);
 
-                        // Функція перерендерує AR сцену під поточний розмір canvas
-                        function onResize() {
-                            arToolkitSource.onResize()
-                            arToolkitSource.copySizeTo(renderer.domElement)
-                            if (arToolkitContext.arController !== null) {
-                                arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
-                            }
-                        }
+                // Додаємо камеру, яка буде пізніше перепризначена на камеру смартфона
+                camera = new THREE.Camera();
+                scene.add(camera);
+                const listener = new THREE.AudioListener();
+                camera.add(listener);
+                const audioLoader = new THREE.AudioLoader();
 
-                        // Викликаємо функцію під час ініціалізації AR
-                        arToolkitSource.init(function onReady() {
-                            onResize()
-                        });
+                // Оголошуємо стандартний рендерер і додаємо його до тега body html документа
+                renderer = new THREE.WebGLRenderer({
+                    antialias: true,
+                    alpha: true
+                });
+                renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+                renderer.setSize(640, 480);
+                renderer.domElement.style.position = 'absolute'
+                renderer.domElement.style.top = '0px'
+                renderer.domElement.style.left = '0px'
+                document.body.appendChild(renderer.domElement);
 
-                        // Викликаємо функцію на resize івент веб-сторінки
-                        window.addEventListener('resize', function () {
-                            onResize()
-                        });
+                clock = new THREE.Clock();
+                deltaTime = 0;
+                totalTime = 0;
 
-                        // Ініціалізуємо AR контекст під камеру, патерни, баркод 3х3
-                        arToolkitContext = new THREEx.ArToolkitContext({
-                            cameraParametersUrl: 'data/camera_para.dat',
-                            detectionMode: 'mono_and_matrix',
-                            matrixCodeType: "3x3",
-                            maxDetectionRate: 60,
-                            canvasWidth: 640,
-                            canvasHeight: 480
-                        });
+                arToolkitSource = new THREEx.ArToolkitSource({
+                    sourceType: 'webcam',
+                });
 
-                        // Відновлюємо матрицю проекції камери після закінчення ініціалізації
-                        arToolkitContext.init(function onCompleted() {
-                            camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
-                        });
+                // Функція перерендерує AR сцену під поточний розмір canvas
+                function onResize() {
+                    arToolkitSource.onResize()
+                    arToolkitSource.copySizeTo(renderer.domElement)
+                    if (arToolkitContext.arController !== null) {
+                        arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
+                    }
+                }
 
-                        // Оголошуємо сцену, до якої додамо головний контейнер з усіма 3D об'єктами.
-                        scene = new THREE.Scene();
+                // Викликаємо функцію під час ініціалізації AR
+                arToolkitSource.init(function onReady() {
+                    onResize()
+                });
 
-                        // Додаємо світло на сцену, інакше базові матеріали будуть просто чорними.
-                        // т.к. їм нема чого відображати, зверніться до документації бібліотеки three.js, щоб
-                        // прочитати про докладну роботу класу Material
-                        let ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
-                        scene.add(ambientLight);
+                // Викликаємо функцію на resize івент веб-сторінки
+                window.addEventListener('resize', function () {
+                    onResize()
+                });
 
-                        // Додаємо камеру, яка буде пізніше перепризначена на камеру смартфона
-                        camera = new THREE.Camera();
-                        scene.add(camera);
-                        const listener = new THREE.AudioListener();
-                        camera.add(listener);
-                        const audioLoader = new THREE.AudioLoader();
+                // Ініціалізуємо AR контекст під камеру, патерни, баркод 3х3
+                arToolkitContext = new THREEx.ArToolkitContext({
+                    cameraParametersUrl: 'data/camera_para.dat',
+                    detectionMode: 'mono_and_matrix',
+                    matrixCodeType: "3x3",
+                    maxDetectionRate: 60,
+                    canvasWidth: 640,
+                    canvasHeight: 480
+                });
 
-                        // Оголошуємо стандартний рендерер і додаємо його до тега body html документа
-                        renderer = new THREE.WebGLRenderer({
-                            antialias: true,
-                            alpha: true
-                        });
-                        renderer.setSize(640, 480);
-                        renderer.domElement.style.position = 'absolute'
-                        renderer.domElement.style.top = '0px'
-                        renderer.domElement.style.left = '0px'
-                        document.body.appendChild(renderer.domElement);
+                // Відновлюємо матрицю проекції камери після закінчення ініціалізації
+                arToolkitContext.init(function onCompleted() {
+                    camera.projectionMatrix.copy(arToolkitContext.getProjectionMatrix());
+                });
 
-                        clock = new THREE.Clock();
-                        deltaTime = 0;
-                        totalTime = 0;
+                // Створюємо головну групу для всіх 3D об'єктів
+                mainContainer = new THREE.Group();
 
-                        // Створюємо головну групу для всіх 3D об'єктів
-                        mainContainer = new THREE.Group();
+                // Отримуємо дані з конфігурації
+                let patternNames = [];
+                let patternBarcode = [];
+                let modes = [];
+                let modelFiles = [];
+                let imageFiles = [];
+                let videoFiles = [];
+                let audioFiles = [];
+                let repeatOptions = [];
+                
+                // Визначаємо кількість маркерів з конфігурації
+                let maxMarkers = 10; // Значення за замовчуванням
+                
+                // Заповнюємо масиви з конфігурації, якщо вона була завантажена
+                if (config && config.markers) {
+                    maxMarkers = config.settings ? config.settings.maxMarkers : config.markers.length;
+                    for (let i = 0; i < config.markers.length; i++) {
+                        patternNames.push(config.markers[i].patternName);
+                        patternBarcode.push(config.markers[i].barcode);
+                        modes.push(config.markers[i].contentType);
+                        modelFiles.push(config.markers[i].modelFile);
+                        imageFiles.push(config.markers[i].imageFile);
+                        videoFiles.push(config.markers[i].videoFile);
+                        audioFiles.push(config.markers[i].audioFile);
+                        repeatOptions.push(config.markers[i].repeatOption.toString());
+                    }
+                } else {
+                    // Якщо конфігурація не завантажилася, використовуємо стандартні значення
+                    patternNames = ["pattern-ScanMe.patt","","pattern-Cat.patt","","pattern-pngwing.patt","","pattern-Bender.patt","","pattern-kopatuch.patt",""];
+                    patternBarcode = [-1, 1, -1, 2, -1, 3, -1, 4, -1, 5];
+                    modes = ["video","video","model","video","model","video","model","video","model","video"];
+                    modelFiles = ["","","cat.gltf","","penguinex.glb","","Bender.glb","","model.glb",""];
+                    imageFiles = ["","","","","","","","","",""];
+                    videoFiles = ["Intro_1.mp4","1-song.mp4","","2-song.mp4","","3-song.mp4","","4-song.mp4","","5-sunrise.mp4"];
+                    audioFiles = ["","","chorus.mp3","","chorus.mp3","","chorus.mp3","","chorus.mp3",""];
+                    repeatOptions = ["false","false","false","false","false","false","false","false","false","false"];
+                }
+  
+                // Створюємо масив для всіх маркерів
+                const markerRoots = [];
+                for (let i = 0; i < maxMarkers; i++) {
+                    markerRoots[i] = new THREE.Group();
+                }
+  
+                // Проходимо по кожному маркеру з масиву і додаємо його в головний контейнер
+                for (let i = 0; i < maxMarkers; i++) {
+                    mainContainer.add(markerRoots[i]);
 
-                        // Створюємо масив для всіх маркерів
-                        const markerRoots = [];
-                        for (let i = 0; i < settings.maxMarkers; i++) {
-                            markerRoots[i] = new THREE.Group();
-                        }
+                    // Якщо поточний маркер – це баркод, створюємо AR контролер під баркод
+                    // якщо поточний маркер це патерн, аналогічно створюємо AR контролер під патерн
+                    if (patternBarcode[i] === -1) {
+                        let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoots[i], {
+                            type: 'pattern', patternUrl: patternNames[i], size: 1 + (i + 1) / patternIdOffset
+                        })
+                        patternsID.push(patternNames[i]);
+                    } else {
+                        let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoots[i], {
+                            type: "barcode", barcodeValue: patternBarcode[i],
+                        })
+                        barcodesID.push(patternBarcode[i]);
+                    }
 
-                        // Проходимо по кожному маркеру з масиву і додаємо його в головний контейнер
-                        for (let i = 0; i < settings.maxMarkers; i++) {
-                            const marker = markers[i];
-                            
-                            mainContainer.add(markerRoots[i]);
+                    // Використовуємо switch для роботи з кожним окремим випадком контенту
+                    switch (modes[i]) {
+                        // Якщо контент під маркер це модель
+                        case 'model':
+                            function onProgress(xhr) { console.log((xhr.loaded / xhr.total * 100) + '% loaded'); }
+                            function onError(xhr) { console.log('An error happened'); }
 
-                            // Якщо поточний маркер – це баркод, створюємо AR контролер під баркод
-                            // якщо поточний маркер це патерн, аналогічно створюємо AR контролер під патерн
-                            if (marker.type === 'pattern') {
-                                let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoots[i], {
-                                    type: 'pattern', 
-                                    patternUrl: marker.patternName, 
-                                    size: 1 + (i + 1) / patternIdOffset
-                                })
-                                patternsID.push(marker.patternName);
-                            } else if (marker.type === 'barcode') {
-                                let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoots[i], {
-                                    type: "barcode", 
-                                    barcodeValue: marker.barcode,
-                                })
-                                barcodesID.push(marker.barcode);
-                            }
-
-                            // Використовуємо switch для роботи з кожним окремим випадком контенту
-                            switch (marker.contentType) {
-                                // Якщо контент під маркер це модель
-                                case 'model':
-                                    function onProgress(xhr) { console.log((xhr.loaded / xhr.total * 100) + '% loaded'); }
-                                    function onError(xhr) { console.log('An error happened'); }
-
-                                    contentPromises.push(new Promise((resolve) => {
-                                        const test = new THREE.GLTF2Loader().load(`${marker.modelFile}`, (response) => {
-                                            const scene = response.scene;
-                                            const object = scene.children[0];
-											
-                                            // Застосовуємо масштаб, позицію та обертання з конфігурації
-                                            if (object) {
-                                                object.scale.set(marker.scale.x, marker.scale.y, marker.scale.z);
-                                                object.position.set(marker.position.x, marker.position.y, marker.position.z);
-                                                object.rotation.set(marker.rotation.x, marker.rotation.y, marker.rotation.z);
-                                            }
-											
-                                            // Додавання нашої моделі до контейнера групи маркерів
-                                            markerRoots[i].add(object);
-                                            resolve(marker.modelFile)
-                                        }, onProgress, onError)
-                                    }).then((file) => {
-                                        console.log(`File ${file} loaded`)
-                                    }))
-                                    break;
-                                // Якщо контент під маркер це зображення
-                                case 'image':
-                                    if (marker.imageFile) {
-                                        contentPromises.push(new Promise((resolve) => {
-                                            // Завантажуємо зображення
-                                            let loader = new THREE.TextureLoader();
-                                            loader.load(`${marker.imageFile}`, (texture) => {
-                                                let geometry1, ratio = texture.image.naturalWidth / texture.image.naturalHeight;
-                                                if (texture.image.naturalHeight < texture.image.naturalWidth) {
-                                                    geometry1 = new THREE.PlaneBufferGeometry(ratio, 1);
-                                                } else {
-                                                    geometry1 = new THREE.PlaneBufferGeometry(1, 1 / ratio);
-                                                }
-                                                let material1 = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-                                                mesh1 = new THREE.Mesh(geometry1, material1);
-                                                // Повертаємо площину
-                                                mesh1.rotation.x = -Math.PI / 2;
-                                                // Додаємо площину у контейнер
-                                                markerRoots[i].add(mesh1);
-                                                resolve(marker.imageFile)
-                                            });
-                                        }).then(image => {
-                                            console.log(`File ${image} loaded`)
-                                        }))
-                                    }
-                                    break;
-                                // Якщо контент під маркер - це відео
-                                case 'video':
-                                    // Оголошуємо площину під відео
-                                    let geometry2 = new THREE.PlaneBufferGeometry(1.6, 0.9);
-                                    // Оголошуємо та завантажуємо відео
-                                    let video = document.createElement('video');
-                                    video.src = `${marker.videoFile}`;
-                                    video.playsInline = true;
-                                    // Встановлюємо відео на автоповтор залежно від значення у налаштуваннях
-                                    if (marker.repeatOption) {
-                                        video.addEventListener('ended', () => {
-                                            video.play();
-                                        })
-                                    }
-                                    // Додаємо відео до масиву аудіо контенту
-                                    if (marker.type === 'pattern') {
-                                        patternsSound.set(i, video);
-                                    } else {
-                                        barcodesSound.set(marker.barcode, video);
-                                    }
-                                    // Перенаправляємо текстуру з відео на матеріал для площини.
-                                    let texture2 = new THREE.VideoTexture(video);
-                                    texture2.minFilter = THREE.LinearFilter;
-                                    texture2.magFilter = THREE.LinearFilter;
-                                    texture2.format = THREE.RGBFormat;
-                                    let material2 = new THREE.MeshBasicMaterial({ map: texture2 });
-                                    mesh2 = new THREE.Mesh(geometry2, material2);
-                                    // Повертаємо площину
-                                    mesh2.rotation.x = -Math.PI / 2;
-                                    // Додаємо площину у контейнер
-                                    markerRoots[i].add(mesh2);
-                                    break;
-                                case 'controller':
-                                    controller = new THREE.Mesh(
-                                        new THREE.CubeGeometry(10, 0.15, 0.15),
-                                        new THREE.MeshBasicMaterial({ color: 'green' })
-                                    );
-                                    controller.rotation.y = Math.PI / 2;
-                                    controller.position.y = 0.125;
-                                    controller.position.z = -4.5;
-                                    markerRoots[i].add(controller);
-                                    break;
-                                default:
-                                    // Якщо жодного контенту не додано, додаємо білу площину.
-                                    mesh11 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1),
-                                        new THREE.MeshBasicMaterial({ color: '#fff' }));
-                                    // Повертаємо площину
-                                    mesh11.rotation.x = -Math.PI / 2;
-                                    // Додаємо площину у контейнер
-                                    markerRoots[i].add(mesh11);
-                                    break;
-                            }
-
-                            // Якщо є аудіо файли, налаштовуємо їх і додаємо в масив аудіо контенту.
-                            if (marker.audioFile) {
-                                contentPromises.push(new Promise((resolve, reject) => {
-                                    audioLoader.load(`${marker.audioFile}`, function (buffer) {
-                                        // Створюємо аудіо джерело
-                                        let sound = new THREE.Audio(listener);
-                                        sound.name = `${marker.audioFile}`;
-                                        sound.setBuffer(buffer);
-                                        // Встановлюємо відео на автоповтор залежно від налаштувань
-                                        if (marker.repeatOption) {
-                                            sound.setLoop(true);
-                                        }
-                                        if (marker.type === 'pattern') {
-                                            patternsSound.set(i, sound);
+                            contentPromises.push(new Promise((resolve) => {
+                                const test = new THREE.GLTF2Loader().load(`${modelFiles[i]}`, (response) => {
+                                    const scene = response.scene;
+                                    const object = scene.children[0];
+									
+                                    // Іноді модель не можна побачити з кількох причин, найчастіше варто збільшити чи зменшити у 100 разів.
+                                    // Читайте: https://threejs.org/docs/index.html#manual/en/introduction/Loading-3D-models
+                                    // Тут ми зменшуємо її, щоб точно побачити її на сцені. Ви можете видалити цю шкалу, якщо потрібно
+                                    switch (i) {
+						case 2: object.scale.set(0.4, 0.4, 0.4); break;
+						case 4: object.scale.set(0.5, 0.5, 0.5); break;
+						case 6: object.scale.set(0.7, 0.7, 0.7); break;
+						case 8: object.scale.set(1.2, 1.2, 1.2); break;
+						    						    
+    				    }
+									
+                                   	// Ви можете самостійно змінити поворот або позицію моделі
+                                   	// object.position.set(X, Y, Z);
+					// X - право (+) или влево (-) от камеры
+					// Y - вверх (+) или вниз (-) от камеры
+				    	// Z - ближе (+) или дальше (-) от камеры
+					switch (i) {
+					        case 2: object.position.set(0, 0, 0); break;
+						case 4: object.position.set(0, 0, -0.5); break;
+						case 6: object.position.set(-0.5, -1, -2); break;
+						case 8: object.position.set(0, 0, 0); break;
+    				    }
+					
+				    // object.rotation.set(X_angle, Y_angle, Z_angle), 
+				    //
+				    // Z_angle - угол вперед (+) или назад (-) от положения камеры
+				    // Math.PI - 180 градусов
+                                    //object.rotation.set(0, Math.PI, Math.PI);
+				    switch (i) {
+					        // case 2: object.rotation.set(0, -Math.PI/2, 0); break;
+						case 4: object.rotation.set(0, -Math.PI/2, 0); break;
+						case 6: object.rotation.set(0, -Math.PI/2, 0); break;
+						// case 8: object.rotation.set(0, 0, Math.PI/2); break;
+    				    }
+					
+                                    // Додавання нашої моделі до контейнера групи маркерів
+                                    markerRoots[i].add(object);
+                                    resolve(modelFiles[i])
+                                }, onProgress, onError)
+                            }).then((file) => {
+                                console.log(`File ${file} loaded`)
+                            }))
+                            break;
+                        // Якщо контент під маркер це зображення
+                        case 'image':
+                            if (imageFiles[i]) {
+                                contentPromises.push(new Promise((resolve) => {
+                                    // Завантажуємо зображення
+                                    let loader = new THREE.TextureLoader();
+                                    loader.load(`${imageFiles[i]}`, (texture) => {
+                                        let geometry1, ratio = texture.image.naturalWidth / texture.image.naturalHeight;
+                                        if (texture.image.naturalHeight < texture.image.naturalWidth) {
+                                            geometry1 = new THREE.PlaneBufferGeometry(ratio, 1);
                                         } else {
-                                            barcodesSound.set(marker.barcode, sound);
+                                            geometry1 = new THREE.PlaneBufferGeometry(1, 1 / ratio);
                                         }
-                                        resolve(sound)
+                                        let material1 = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+                                        mesh1 = new THREE.Mesh(geometry1, material1);
+                                        // Повертаємо площину
+                                        mesh1.rotation.x = -Math.PI / 2;
+                                        // Додаємо площину у контейнер
+                                        markerRoots[i].add(mesh1);
+                                        resolve(imageFiles[i])
                                     });
-                                }).then((sound) => {
-                                    sound.play()
-                                    sound.stop()
-                                    console.log(`File ${sound.name} loaded`)
+                                }).then(image => {
+                                    console.log(`File ${image} loaded`)
                                 }))
                             }
-                        }
+                            break;
+                        // Якщо контент під маркер - це відео
+                        case 'video':
+                            // Оголошуємо площину під відео
+                            let geometry2 = new THREE.PlaneBufferGeometry(1.6 , 0.9);
+                            // Оголошуємо та завантажуємо відео
+                            let video = document.createElement('video');
+                            video.src = `${videoFiles[i]}`;
+                            video.playsInline = true;
+                            // Встановлюємо відео на автоповтор залежно від значення у масиві
+                            if (repeatOptions[i]) {
+                                video.addEventListener('ended', () => {
+                                    video.play();
+                                })
+                            }
+                            // Додаємо відео до масиву аудіо контенту
+                            if (patternBarcode[i] === -1) {
+                                patternsSound.set(i, video);
+                            } else {
+                                barcodesSound.set(patternBarcode[i], video);
+                            }
+                            // Перенаправляємо текстуру з відео на матеріал для площини.
+                            let texture2 = new THREE.VideoTexture(video);
+                            texture2.minFilter = THREE.LinearFilter;
+                            texture2.magFilter = THREE.LinearFilter;
+                            texture2.format = THREE.RGBFormat;
+                            let material2 = new THREE.MeshBasicMaterial({ map: texture2 });
+                            mesh2 = new THREE.Mesh(geometry2, material2);
+                            // Повертаємо площину
+                            mesh2.rotation.x = -Math.PI / 2;
+                            // Додаємо площину у контейнер
+                            markerRoots[i].add(mesh2);
+                            break;
+                        case 'controller':
+                            controller = new THREE.Mesh(
+                                new THREE.CubeGeometry(10, 0.15, 0.15),
+                                new THREE.MeshBasicMaterial({ color: 'green' })
+                            );
+                            controller.rotation.y = Math.PI / 2;
+                            controller.position.y = 0.125;
+                            controller.position.z = -4.5;
+                            markerRoots[i].add(controller);
+                            break;
+                        default:
+                            // Якщо жодного контенту не додано, додаємо білу площину.
+                            mesh11 = new THREE.Mesh(new THREE.PlaneBufferGeometry(1, 1),
+                                new THREE.MeshBasicMaterial({ color: '#fff' }));
+                            // Повертаємо площину
+                            mesh11.rotation.x = -Math.PI / 2;
+                            // Додаємо площину у контейнер
+                            markerRoots[i].add(mesh11);
+                            break;
+                    }
 
-                        // Ховаємо лоадер після завантаження компонентів
-                        Promise.all(contentPromises)
-                            .then(() => {
-                                console.log('Most of the content loaded')
-                                contentInitialized = true;
-                                loader.style.opacity = '0';
+                    // Якщо є аудіо файли, налаштовуємо їх і додаємо в масив аудіо контенту.
+                    if (audioFiles[i]) {
+                        contentPromises.push(new Promise((resolve, reject) => {
+                            audioLoader.load(`${audioFiles[i]}`, function (buffer) {
+                                // Створюємо аудіо джерело
+                                let sound = new THREE.Audio(listener);
+                                sound.name = `${audioFiles[i]}`;
+                                sound.setBuffer(buffer);
+                                // Встановлюємо відео на автоповтор залежно від значення у масиві
+                                if (repeatOptions[i]) {
+                                    sound.setLoop(true);
+                                }
+                                if (patternBarcode[i] === -1) {
+                                    patternsSound.set(i, sound);
+                                } else {
+                                    barcodesSound.set(patternBarcode[i], sound);
+                                }
+                                resolve(sound)
                             });
+                        }).then((sound) => {
+                            sound.play()
+                            sound.stop()
+                            console.log(`File ${sound.name} loaded`)
+                        }))
+                    }
+                }
 
-                        // Додаємо головний контейнер на сцену
-                        scene.add(mainContainer);
-                    })
-                    .catch(error => {
-                        console.error('Error loading configuration:', error);
+                // Ховаємо лоадер після завантаження компонентів
+                Promise.all(contentPromises)
+                    .then(() => {
+                        console.log('Most of the content loaded')
+                        contentInitialized = true;
+                        loader.style.opacity = '0';
                     });
+
+                // Додаємо головний контейнер на сцену
+                scene.add(mainContainer);
             }
 
             function checkController() {
