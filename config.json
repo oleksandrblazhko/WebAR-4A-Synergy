@@ -10,10 +10,7 @@
       "imageFile": "",
       "videoFile": "Intro_1.mp4",
       "audioFile": "",
-      "repeatOption": false,
-      "scale": {"x": 1, "y": 1, "z": 1},
-      "position": {"x": 0, "y": 0, "z": 0},
-      "rotation": {"x": 0, "y": 0, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 1,
@@ -25,10 +22,7 @@
       "imageFile": "",
       "videoFile": "1-song.mp4",
       "audioFile": "",
-      "repeatOption": false,
-      "scale": {"x": 1, "y": 1, "z": 1},
-      "position": {"x": 0, "y": 0, "z": 0},
-      "rotation": {"x": 0, "y": 0, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 2,
@@ -40,10 +34,7 @@
       "imageFile": "",
       "videoFile": "",
       "audioFile": "chorus.mp3",
-      "repeatOption": false,
-      "scale": {"x": 0.4, "y": 0.4, "z": 0.4},
-      "position": {"x": 0, "y": 0, "z": 0},
-      "rotation": {"x": 0, "y": -1.5707963267948966, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 3,
@@ -55,10 +46,7 @@
       "imageFile": "",
       "videoFile": "2-song.mp4",
       "audioFile": "",
-      "repeatOption": false,
-      "scale": {"x": 1, "y": 1, "z": 1},
-      "position": {"x": 0, "y": 0, "z": 0},
-      "rotation": {"x": 0, "y": 0, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 4,
@@ -70,10 +58,7 @@
       "imageFile": "",
       "videoFile": "",
       "audioFile": "chorus.mp3",
-      "repeatOption": false,
-      "scale": {"x": 0.5, "y": 0.5, "z": 0.5},
-      "position": {"x": 0, "y": 0, "z": -0.5},
-      "rotation": {"x": 0, "y": -1.5707963267948966, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 5,
@@ -85,10 +70,7 @@
       "imageFile": "",
       "videoFile": "3-song.mp4",
       "audioFile": "",
-      "repeatOption": false,
-      "scale": {"x": 1, "y": 1, "z": 1},
-      "position": {"x": 0, "y": 0, "z": 0},
-      "rotation": {"x": 0, "y": 0, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 6,
@@ -100,10 +82,7 @@
       "imageFile": "",
       "videoFile": "",
       "audioFile": "chorus.mp3",
-      "repeatOption": false,
-      "scale": {"x": 0.7, "y": 0.7, "z": 0.7},
-      "position": {"x": -0.5, "y": -1, "z": -2},
-      "rotation": {"x": 0, "y": -1.5707963267948966, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 7,
@@ -115,10 +94,7 @@
       "imageFile": "",
       "videoFile": "4-song.mp4",
       "audioFile": "",
-      "repeatOption": false,
-      "scale": {"x": 1, "y": 1, "z": 1},
-      "position": {"x": 0, "y": 0, "z": 0},
-      "rotation": {"x": 0, "y": 0, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 8,
@@ -130,10 +106,7 @@
       "imageFile": "",
       "videoFile": "",
       "audioFile": "chorus.mp3",
-      "repeatOption": false,
-      "scale": {"x": 1.2, "y": 1.2, "z": 1.2},
-      "position": {"x": 0, "y": 0, "z": 0},
-      "rotation": {"x": 0, "y": 0, "z": 0}
+      "repeatOption": false
     },
     {
       "id": 9,
@@ -145,10 +118,7 @@
       "imageFile": "",
       "videoFile": "5-sunrise.mp4",
       "audioFile": "",
-      "repeatOption": false,
-      "scale": {"x": 1, "y": 1, "z": 1},
-      "position": {"x": 0, "y": 0, "z": 0},
-      "rotation": {"x": 0, "y": 0, "z": 0}
+      "repeatOption": false
     }
   ],
   "settings": {
