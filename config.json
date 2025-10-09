@@ -35,9 +35,6 @@
       "contentType": "model",
       "contentFile": "cat.gltf",
       "modelScale": 0.3,
-      "position": {
-        "y": 0
-      },
       "rotation": { "y": -1.5707963267948966 },
       "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
@@ -66,10 +63,7 @@
       "contentType": "model",
       "contentFile": "penguinex.glb",
       "modelScale": 0.3,
-      "position": {
-        "z": -0.5,
-        "y": 0
-      },
+      "position": { "z": -0.5 },
       "rotation": { "y": -1.5707963267948966 },
       "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
@@ -95,11 +89,6 @@
       "contentType": "model",
       "contentFile": "Bender.glb",
       "modelScale": 0.4,
-      "position": {
-        "x": -0.5,
-        "y": 0,
-        "z": -2
-      },
       "rotation": { "y": -1.5707963267948966 },
       "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
@@ -127,7 +116,6 @@
       "contentType": "model",
       "contentFile": "model.glb", 
       "modelScale": 1.2,
-      "position": { "y": 0 },
       "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
     {
