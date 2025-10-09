@@ -572,7 +572,7 @@
 
             function checkController() {
                 // Виконуємо перевірку тільки якщо контролер активний (доданий до сцени)
-                if (controller && controller.parent) {
+                if (controller && controller.parent && controller.parent.visible) {
                     mainContainer.traverse((object) => {
                         if (object.isMesh && object !== controller) {
                             if (detectCollisionCubes(object, controller)) {
