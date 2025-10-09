@@ -571,7 +571,7 @@
             }
 
             function checkController() {
-                // Виконуємо перевірку тільки якщо контролер активний (доданий до сцени)
+                // Виконуємо перевірку тільки якщо контролер активний (видно камері)
                 if (controller && controller.parent && controller.parent.visible) {
                     mainContainer.traverse((object) => {
                         if (object.isMesh && object !== controller) {
@@ -580,6 +580,14 @@
                             } else {
                                 object.material.color.set('white')
                             }
+                        }
+                    });
+                }
+                // Якщо контролер не активний, скидаємо всі об'єкти до білого кольору
+                else {
+                    mainContainer.traverse((object) => {
+                        if (object.isMesh && object !== controller) {
+                            object.material.color.set('white')
                         }
                     });
                 }
