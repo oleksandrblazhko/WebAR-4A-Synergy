@@ -450,6 +450,21 @@
                                             primitive.radialSegments || 32
                                         );
                                         break;
+                                    case 'ConeGeometry':
+                                        geometry = new THREE.ConeGeometry(
+                                            primitive.radius || 0.5, 
+                                            primitive.height || 1, 
+                                            primitive.radialSegments || 32
+                                        );
+                                        break;
+                                    case 'TorusGeometry':
+                                        geometry = new THREE.TorusGeometry(
+                                            primitive.radius || 1, 
+                                            primitive.tubeRadius || 0.4, 
+                                            primitive.radialSegments || 16, 
+                                            primitive.tubularSegments || 32
+                                        );
+                                        break;
                                     default:
                                         geometry = new THREE.BoxGeometry(1, 1, 1);
                                 }
