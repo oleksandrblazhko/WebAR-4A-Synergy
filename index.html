@@ -27,11 +27,7 @@
                 text-transform: uppercase; font-family: Arial, Helvetica, sans-serif; font-weight: 400; line-height: 1.5em; font-size: large; white-space: nowrap;
                 user-select: none; pointer-events: none;
             ">
-            Press here
-            <br>
-            to enter the WebAR-booklet 
-	    <br>
-            "Anastasia's English School"
+            Loading...
         </div>
     </div>
 
@@ -76,6 +72,16 @@
 
             let controller;
 
+            // Функція оновлення привітального тексту з конфігурації
+            function updateWelcomeText() {
+                if (config && config.settings && config.settings.welcomeText) {
+                    const textWrapper = document.getElementById('text-wrapper');
+                    if (textWrapper) {
+                        textWrapper.innerHTML = config.settings.welcomeText;
+                    }
+                }
+            }
+
             // Завантажуємо конфігурацію з config.json перед ініціалізацією
             fetch('config.json')
                 .then(response => {
@@ -86,6 +92,8 @@
                 })
                 .then(data => {
                     config = data;
+                    // Оновлюємо привітальний текст з конфігурації
+                    updateWelcomeText();
                     // Ініціалізуємо сцену та запускаємо цикл анімації
                     initialize();
                     animate();
@@ -119,13 +127,31 @@
                 camera.add(listener);
                 const audioLoader = new THREE.AudioLoader();
 
+                // Визначаємо роздільну здатність з конфігурації
+                let canvasWidth = 640;
+                let canvasHeight = 480;
+                
+                if (config && config.settings) {
+                    switch(config.settings.resolution) {
+                        case 'high':
+                            canvasWidth = 1280;
+                            canvasHeight = 720;
+                            break;
+                        case 'low':
+                        default:
+                            canvasWidth = 640;
+                            canvasHeight = 480;
+                            break;
+                    }
+                }
+
                 // Оголошуємо стандартний рендерер і додаємо його до тега body html документа
                 renderer = new THREE.WebGLRenderer({
                     antialias: true,
                     alpha: true
                 });
                 renderer.setClearColor(new THREE.Color('lightgrey'), 0)
-                renderer.setSize(640, 480);
+                renderer.setSize(canvasWidth, canvasHeight);
                 renderer.domElement.style.position = 'absolute'
                 renderer.domElement.style.top = '0px'
                 renderer.domElement.style.left = '0px'
@@ -164,8 +190,8 @@
                     detectionMode: 'mono_and_matrix',
                     matrixCodeType: "3x3",
                     maxDetectionRate: 60,
-                    canvasWidth: 640,
-                    canvasHeight: 480
+                    canvasWidth: canvasWidth,
+                    canvasHeight: canvasHeight
                 });
 
                 // Відновлюємо матрицю проекції камери після закінчення ініціалізації
