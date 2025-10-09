@@ -62,7 +62,7 @@
       "primitive": {
         "type": "BoxGeometry",
         "size": [1, 1, 1],
-        "textureFile": "texture.jpg",
+        "textureFile": "texture_blue.jpg",
         "color": "#ff0000",
         "position": [0, 0, 0],
         "rotation": [0, 0, 0],
@@ -96,7 +96,7 @@
         "widthSegments": 16,
         "heightSegments": 16,
         "color": "#00ff00",
-        "textureFile": "texture.jpg",
+        "textureFile": "texture_red.jpg",
         "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "animation": { "type": "rotation", "axis": "x", "speed": 0.02 }
@@ -125,7 +125,7 @@
         "height": 1,
         "radialSegments": 16,
         "color": "#0000ff",
-        "textureFile": "texture.jpg",
+        "textureFile": "texture_green.jpg",
         "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "animation": { "type": "rotation", "axis": "z", "speed": 0.015 }
