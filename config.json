@@ -1,4 +1,8 @@
 {
+  "settings": {
+    "resolution": "high",
+    "welcomeText": "Press here<br>to enter the WebAR-booklet<br>Anastasia's English School"
+  },
   "markers": [
     {
       "id": 0,
@@ -100,6 +104,6 @@
       "type": "pattern",
       "target": "pattern-controller.patt",
       "contentType": "controller"
-    }    
+    }
   ]
 }
