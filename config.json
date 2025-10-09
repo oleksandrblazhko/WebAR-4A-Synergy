@@ -15,8 +15,18 @@
       "id": 1,
       "type": "barcode", 
       "target": 1,
-      "contentType": "video",
-      "contentFile": "waterfall.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "ConeGeometry",
+        "radius": 0.5,
+        "height": 1,
+        "radialSegments": 16,
+        "color": "#ffff00",
+        "textureFile": "texture_green.jpg",
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
+      }
     },
     {
       "id": 2,
@@ -36,15 +46,18 @@
       "id": 3,
       "type": "barcode",
       "target": 2,
-      "contentType": "model", 
-      "contentFile": "bird_orange.glb",
-      "modelScale": 0.5,
-      "position": {
-        "z": -0.5,
-        "y": 0
-      },
-      "rotation": {
-        "y": -1.5707963267948966
+      "contentType": "primitive",
+      "primitive": {
+        "type": "TorusGeometry",
+        "radius": 0.5,
+        "tubeRadius": 0.2,
+        "radialSegments": 16,
+        "tubularSegments": 32,
+        "color": "#ff00ff",
+        "textureFile": "texture_red.jpg",
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "x", "speed": 0.02 }
       }
     },
     {
