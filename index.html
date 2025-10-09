@@ -45,6 +45,37 @@
         const access = document.getElementById('access');
         const loader = document.getElementById('loader');
 
+        // Оголошуємо глобальну змінну для конфігурації
+        let config = null; // Configuration loaded from config.json
+        
+        // Функція оновлення привітального тексту з конфігурації
+        function updateWelcomeText() {
+            if (config && config.settings && config.settings.welcomeText) {
+                const textWrapper = document.getElementById('text-wrapper');
+                if (textWrapper) {
+                    textWrapper.innerHTML = config.settings.welcomeText;
+                }
+            }
+        }
+
+        // Завантажуємо конфігурацію з config.json при завантаженні сторінки для відображення привітального тексту
+        fetch('config.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Config file error: ${response.status} ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                config = data;
+                // Оновлюємо привітальний текст з конфігурації
+                updateWelcomeText();
+            })
+            .catch(error => {
+                console.error('Error loading config for welcome text:', error);
+                // Залишаємо стандартний текст "Loading..." у випадку помилки
+            });
+
         function initiateExperience() {
             // Оголошуємо глобальні змінні
             var scene, camera, renderer, clock, deltaTime, totalTime;
@@ -64,7 +95,6 @@
             var contentPromises = [];
 
             let contentInitialized = false;
-            let config = null; // Configuration loaded from config.json
             let barcodesSound = new Map();
             let patternsSound = new Map();
             let barcodesID = [];
@@ -72,15 +102,7 @@
 
             let controller;
 
-            // Функція оновлення привітального тексту з конфігурації
-            function updateWelcomeText() {
-                if (config && config.settings && config.settings.welcomeText) {
-                    const textWrapper = document.getElementById('text-wrapper');
-                    if (textWrapper) {
-                        textWrapper.innerHTML = config.settings.welcomeText;
-                    }
-                }
-            }
+            // Використовуємо глобальну функцію updateWelcomeText(), яку ми вже визначили вище
 
             // Завантажуємо конфігурацію з config.json перед ініціалізацією
             fetch('config.json')
