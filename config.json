@@ -26,6 +26,9 @@
       "contentFile": "cat.gltf",
       "audioFile": "chorus.mp3",
       "modelScale": 0.4,
+      "position": {
+        "y": 0
+      },
       "rotation": {
         "y": -1.5707963267948966
       }
@@ -46,7 +49,8 @@
       "audioFile": "chorus.mp3",
       "modelScale": 0.5,
       "position": {
-        "z": -0.5
+        "z": -0.5,
+        "y": 0
       },
       "rotation": {
         "y": -1.5707963267948966
@@ -61,7 +65,7 @@
         "type": "BoxGeometry",
         "size": [1, 1, 1],
         "color": "#ff0000",
-        "position": [0, 0.5, 0],
+        "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
       }
@@ -76,7 +80,7 @@
       "modelScale": 0.7,
       "position": {
         "x": -0.5,
-        "y": -1,
+        "y": 0,
         "z": -2
       },
       "rotation": {
@@ -94,7 +98,7 @@
         "widthSegments": 16,
         "heightSegments": 16,
         "color": "#00ff00",
-        "position": [0, 1, 0],
+        "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "animation": { "type": "rotation", "axis": "x", "speed": 0.02 }
       }
@@ -106,7 +110,10 @@
       "contentType": "model",
       "contentFile": "model.glb", 
       "audioFile": "chorus.mp3",
-      "modelScale": 1.2
+      "modelScale": 1.2,
+      "position": {
+        "y": 0
+      }
     },
     {
       "id": 9,
@@ -120,7 +127,7 @@
         "height": 1,
         "radialSegments": 16,
         "color": "#0000ff",
-        "position": [0, 0.5, 0],
+        "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "animation": { "type": "rotation", "axis": "z", "speed": 0.015 }
       }
