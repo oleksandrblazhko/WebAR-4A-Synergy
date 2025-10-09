@@ -56,8 +56,15 @@
       "id": 5,
       "type": "barcode",
       "target": 3,
-      "contentType": "video",
-      "contentFile": "3-song.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "BoxGeometry",
+        "size": [1, 1, 1],
+        "color": "#ff0000",
+        "position": [0, 0.5, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
+      }
     },
     {
       "id": 6,
@@ -80,8 +87,17 @@
       "id": 7,
       "type": "barcode",
       "target": 4,
-      "contentType": "video",
-      "contentFile": "4-song.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "SphereGeometry",
+        "radius": 0.5,
+        "widthSegments": 16,
+        "heightSegments": 16,
+        "color": "#00ff00",
+        "position": [0, 1, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "x", "speed": 0.02 }
+      }
     },
     {
       "id": 8,
@@ -96,8 +112,18 @@
       "id": 9,
       "type": "barcode",
       "target": 5,
-      "contentType": "video",
-      "contentFile": "5-sunrise.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "CylinderGeometry",
+        "radiusTop": 0.3,
+        "radiusBottom": 0.3,
+        "height": 1,
+        "radialSegments": 16,
+        "color": "#0000ff",
+        "position": [0, 0.5, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "z", "speed": 0.015 }
+      }
     },
     {
       "id": 10,
