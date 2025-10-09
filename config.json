@@ -1,6 +1,6 @@
 {
   "settings": {
-    "resolution": "high",
+    "resolution": "low",
     "welcomeText": "Press here<br>to enter the WebAR-booklet<br>Anastasia's English School"
   },
   "markers": [
