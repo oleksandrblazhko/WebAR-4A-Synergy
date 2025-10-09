@@ -355,6 +355,12 @@
 					
                                     // Додавання нашої моделі до контейнера групи маркерів
                                     markerRoots[i].add(object);
+                                    
+                                    // Зберігаємо для анімації, якщо вказана в конфігурації
+                                    if (config.markers[i] && config.markers[i].animation) {
+                                        object.userData.animation = config.markers[i].animation;
+                                    }
+                                    
                                     resolve(modelFiles[i])
                                 }, onProgress, onError)
                             }).then((file) => {
@@ -640,8 +646,8 @@
                 renderer.render(scene, camera);
             }
 
-            // Функція для анімації примітивів
-            function animatePrimitives() {
+            // Функція для анімації примітивів та моделей
+            function animateObjects() {
                 scene.traverse((object) => {
                     if (object.userData && object.userData.animation) {
                         const anim = object.userData.animation;
@@ -668,7 +674,7 @@
                 totalTime += deltaTime;
                 update();
                 checkController();
-                animatePrimitives(); // Анімуємо примітиви
+                animateObjects(); // Анімуємо примітиви та моделі
                 render();
             }
         }
