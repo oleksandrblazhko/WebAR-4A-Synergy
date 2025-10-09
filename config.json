@@ -9,14 +9,14 @@
       "type": "pattern",
       "target": "pattern-ScanMe.patt",
       "contentType": "video",
-      "contentFile": "Intro_1.mp4"
+      "contentFile": "waterfall.mp4"
     },
     {
       "id": 1,
       "type": "barcode", 
       "target": 1,
       "contentType": "video",
-      "contentFile": "1-song.mp4"
+      "contentFile": "waterfall.mp4"
     },
     {
       "id": 2,
@@ -36,8 +36,16 @@
       "id": 3,
       "type": "barcode",
       "target": 2,
-      "contentType": "video", 
-      "contentFile": "2-song.mp4"
+      "contentType": "model", 
+      "contentFile": "bird_orange.glb",
+      "modelScale": 0.5,
+      "position": {
+        "z": -0.5,
+        "y": 0
+      },
+      "rotation": {
+        "y": -1.5707963267948966
+      }
     },
     {
       "id": 4,
@@ -120,10 +128,10 @@
       "contentType": "primitive",
       "primitive": {
         "type": "CylinderGeometry",
-        "radiusTop": 0.3,
-        "radiusBottom": 0.3,
-        "height": 1,
-        "radialSegments": 16,
+        "radiusTop": 4,
+        "radiusBottom": 2,
+        "height": 8,
+        "radialSegments": 8,
         "color": "#0000ff",
         "textureFile": "texture_green.jpg",
         "position": [0, 0, 0],
