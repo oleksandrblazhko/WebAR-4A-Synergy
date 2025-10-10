@@ -355,6 +355,12 @@
 					
                                     // Додавання нашої моделі до контейнера групи маркерів
                                     markerRoots[i].add(object);
+                                    
+                                    // Зберігаємо для анімації, якщо вказана в конфігурації
+                                    if (config.markers[i] && config.markers[i].animation) {
+                                        object.userData.animation = config.markers[i].animation;
+                                    }
+                                    
                                     resolve(modelFiles[i])
                                 }, onProgress, onError)
                             }).then((file) => {
@@ -416,8 +422,93 @@
                             mesh2 = new THREE.Mesh(geometry2, material2);
                             // Повертаємо площину
                             mesh2.rotation.x = -Math.PI / 2;
+                            // Встановлюємо позицію для відео-площини, щоб узгодити з іншими об'єктами
+                            if (config.markers[i] && config.markers[i].position) {
+                                const pos = config.markers[i].position;
+                                mesh2.position.set(
+                                    pos.x || 0,
+                                    pos.y || 0,
+                                    pos.z || 0
+                                );
+                            }
                             // Додаємо площину у контейнер
                             markerRoots[i].add(mesh2);
+                            break;
+                        // Якщо контент під маркер - це примітив
+                        case 'primitive':
+                            if (config.markers[i] && config.markers[i].primitive) {
+                                const primitive = config.markers[i].primitive;
+                                let geometry, material, mesh;
+                                
+                                // Створюємо геометрію відповідно до типу
+                                switch(primitive.type) {
+                                    case 'BoxGeometry':
+                                        geometry = new THREE.BoxGeometry(...primitive.size);
+                                        break;
+                                    case 'SphereGeometry':
+                                        geometry = new THREE.SphereGeometry(primitive.radius, primitive.widthSegments || 32, primitive.heightSegments || 32);
+                                        break;
+                                    case 'CylinderGeometry':
+                                        geometry = new THREE.CylinderGeometry(
+                                            primitive.radiusTop || 0.5, 
+                                            primitive.radiusBottom || 0.5, 
+                                            primitive.height || 1, 
+                                            primitive.radialSegments || 32
+                                        );
+                                        break;
+                                    case 'ConeGeometry':
+                                        geometry = new THREE.ConeGeometry(
+                                            primitive.radius || 0.5, 
+                                            primitive.height || 1, 
+                                            primitive.radialSegments || 32
+                                        );
+                                        break;
+                                    case 'TorusGeometry':
+                                        geometry = new THREE.TorusGeometry(
+                                            primitive.radius || 1, 
+                                            primitive.tubeRadius || 0.4, 
+                                            primitive.radialSegments || 16, 
+                                            primitive.tubularSegments || 32
+                                        );
+                                        break;
+                                    default:
+                                        geometry = new THREE.BoxGeometry(1, 1, 1);
+                                }
+                                
+                                // Створюємо матеріал з кольором або текстурою
+                                if (primitive.textureFile) {
+                                    // Завантажуємо текстуру, якщо вона вказана
+                                    let texture = new THREE.TextureLoader().load(primitive.textureFile);
+                                    material = new THREE.MeshBasicMaterial({ 
+                                        map: texture,
+                                        color: new THREE.Color(primitive.color || '#ffffff') // Додаємо базовий колір для випадку, якщо текстура не завантажиться
+                                    });
+                                } else {
+                                    // Використовуємо колір, якщо текстура не вказана
+                                    material = new THREE.MeshBasicMaterial({ 
+                                        color: new THREE.Color(primitive.color || '#ffffff') 
+                                    });
+                                }
+                                
+                                // Створюємо меш
+                                mesh = new THREE.Mesh(geometry, material);
+                                
+                                // Застосовуємо позицію та обертання
+                                if (primitive.position) {
+                                    mesh.position.set(...primitive.position);
+                                }
+                                if (primitive.rotation) {
+                                    mesh.rotation.set(...primitive.rotation);
+                                }
+                                
+                                // Додаємо до контейнера маркера
+                                markerRoots[i].add(mesh);
+                                
+                                // Зберігаємо для анімації
+                                if (primitive.animation) {
+                                    mesh.userData.animation = primitive.animation;
+                                }
+                            }
                             break;
                         case 'controller':
                             controller = new THREE.Mesh(
@@ -480,7 +571,8 @@
             }
 
             function checkController() {
-                if (controller) {
+                // Виконуємо перевірку тільки якщо контролер активний (видно камері)
+                if (controller && controller.parent && controller.parent.visible) {
                     mainContainer.traverse((object) => {
                         if (object.isMesh && object !== controller) {
                             if (detectCollisionCubes(object, controller)) {
@@ -488,6 +580,14 @@
                             } else {
                                 object.material.color.set('white')
                             }
+                        }
+                    });
+                }
+                // Якщо контролер не активний, скидаємо всі об'єкти до білого кольору
+                else {
+                    mainContainer.traverse((object) => {
+                        if (object.isMesh && object !== controller) {
+                            object.material.color.set('white')
                         }
                     });
                 }
@@ -555,6 +655,26 @@
                 renderer.render(scene, camera);
             }
 
+            // Функція для анімації примітивів та моделей
+            function animateObjects() {
+                scene.traverse((object) => {
+                    if (object.userData && object.userData.animation) {
+                        const anim = object.userData.animation;
+                        switch(anim.axis) {
+                            case 'x':
+                                object.rotation.x += anim.speed;
+                                break;
+                            case 'y':
+                                object.rotation.y += anim.speed;
+                                break;
+                            case 'z':
+                                object.rotation.z += anim.speed;
+                                break;
+                        }
+                    }
+                });
+            }
+
             // Запускаємо цикл анімації
             function animate(time) {
                 // Прив'язуємо цикл анімації до рендеру браузера
@@ -563,6 +683,7 @@
                 totalTime += deltaTime;
                 update();
                 checkController();
+                animateObjects(); // Анімуємо примітиви та моделі
                 render();
             }
         }

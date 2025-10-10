@@ -1,7 +1,7 @@
 {
   "settings": {
-    "resolution": "high",
-    "welcomeText": "Press here<br>to enter the WebAR-booklet<br>Anastasia's English School"
+    "resolution": "low",
+    "welcomeText": "Press here<br>to start the WebAR-BoardGame"
   },
   "markers": [
     {
@@ -9,14 +9,24 @@
       "type": "pattern",
       "target": "pattern-ScanMe.patt",
       "contentType": "video",
-      "contentFile": "Intro_1.mp4"
+      "contentFile": "waterfall.mp4"
     },
     {
       "id": 1,
       "type": "barcode", 
       "target": 1,
-      "contentType": "video",
-      "contentFile": "1-song.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "ConeGeometry",
+        "radius": 0.5,
+        "height": 1,
+        "radialSegments": 16,
+        "color": "#ffff00",
+        "textureFile": "texture_green.jpg",
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
+      }
     },
     {
       "id": 2,
@@ -24,18 +34,27 @@
       "target": "pattern-Cat.patt",
       "contentType": "model",
       "contentFile": "cat.gltf",
-      "audioFile": "chorus.mp3",
-      "modelScale": 0.4,
-      "rotation": {
-        "y": -1.5707963267948966
-      }
+      "modelScale": 0.3,
+      "rotation": { "y": -1.0 },
+      "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
     {
       "id": 3,
       "type": "barcode",
       "target": 2,
-      "contentType": "video", 
-      "contentFile": "2-song.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "TorusGeometry",
+        "radius": 0.5,
+        "tubeRadius": 0.2,
+        "radialSegments": 16,
+        "tubularSegments": 32,
+        "color": "#ff00ff",
+        "textureFile": "texture_red.jpg",
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "x", "speed": 0.02 }
+      }
     },
     {
       "id": 4,
@@ -43,21 +62,25 @@
       "target": "pattern-pngwing.patt",
       "contentType": "model",
       "contentFile": "penguinex.glb",
-      "audioFile": "chorus.mp3",
-      "modelScale": 0.5,
-      "position": {
-        "z": -0.5
-      },
-      "rotation": {
-        "y": -1.5707963267948966
-      }
+      "modelScale": 0.3,
+      "position": { "z": -0.5 },
+      "rotation": { "y": -1.5707963267948966 },
+      "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
     {
       "id": 5,
       "type": "barcode",
       "target": 3,
-      "contentType": "video",
-      "contentFile": "3-song.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "BoxGeometry",
+        "size": [1, 1, 1],
+        "textureFile": "texture_blue.jpg",
+        "color": "#ff0000",
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
+      }
     },
     {
       "id": 6,
@@ -65,39 +88,53 @@
       "target": "pattern-Bender.patt", 
       "contentType": "model",
       "contentFile": "Bender.glb",
-      "audioFile": "chorus.mp3",
-      "modelScale": 0.7,
-      "position": {
-        "x": -0.5,
-        "y": -1,
-        "z": -2
-      },
-      "rotation": {
-        "y": -1.5707963267948966
-      }
+      "modelScale": 0.3,
+      "rotation": { "y": -1.5707963267948966 },
+      "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
     {
       "id": 7,
       "type": "barcode",
       "target": 4,
-      "contentType": "video",
-      "contentFile": "4-song.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "SphereGeometry",
+        "radius": 0.5,
+        "widthSegments": 16,
+        "heightSegments": 16,
+        "color": "#00ff00",
+        "textureFile": "texture_red.jpg",
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "x", "speed": 0.02 }
+      }
     },
     {
       "id": 8,
       "type": "pattern",
       "target": "pattern-kopatuch.patt",
       "contentType": "model",
-      "contentFile": "model.glb", 
-      "audioFile": "chorus.mp3",
-      "modelScale": 1.2
+      "contentFile": "bird_orange.glb", 
+      "modelScale": 1.0,
+      "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
     {
       "id": 9,
       "type": "barcode",
       "target": 5,
-      "contentType": "video",
-      "contentFile": "5-sunrise.mp4"
+      "contentType": "primitive",
+      "primitive": {
+        "type": "CylinderGeometry",
+        "radiusTop": 0.3,
+        "radiusBottom": 0.3,
+        "height": 1,
+        "radialSegments": 16,
+        "color": "#0000ff",
+        "textureFile": "texture_green.jpg",
+        "position": [0, 0, 0],
+        "rotation": [0, 0, 0],
+        "animation": { "type": "rotation", "axis": "z", "speed": 0.015 }
+      }
     },
     {
       "id": 10,
