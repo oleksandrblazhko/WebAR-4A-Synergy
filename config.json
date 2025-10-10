@@ -35,7 +35,7 @@
       "contentType": "model",
       "contentFile": "cat.gltf",
       "modelScale": 0.3,
-      "rotation": { "y": -1.5707963267948966 },
+      "rotation": { "y": -1.0 },
       "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
     {
@@ -88,7 +88,7 @@
       "target": "pattern-Bender.patt", 
       "contentType": "model",
       "contentFile": "Bender.glb",
-      "modelScale": 0.4,
+      "modelScale": 0.3,
       "rotation": { "y": -1.5707963267948966 },
       "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
@@ -114,8 +114,8 @@
       "type": "pattern",
       "target": "pattern-kopatuch.patt",
       "contentType": "model",
-      "contentFile": "model.glb", 
-      "modelScale": 1.2,
+      "contentFile": "bird_orange.glb", 
+      "modelScale": 1.0,
       "animation": { "type": "rotation", "axis": "y", "speed": 0.01 }
     },
     {
