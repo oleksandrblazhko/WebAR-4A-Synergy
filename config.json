@@ -138,8 +138,8 @@
     },
     {
       "id": 10,
-      "type": "pattern",
-      "target": "pattern-controller.patt",
+      "type": "barcode",
+      "target": 7,      
       "contentType": "controller"
     }
   ]
